@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Book Ticket{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Book Tickets - {{ bus.name }}</h3>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>From:</strong> {{ bus.from_city }}<br>
+                    <strong>To:</strong> {{ bus.to_city }}<br>
+                    <strong>Departure:</strong> {{ bus.departure_time }}<br>
+                    <strong>Price per seat:</strong> ${{ "%.2f"|format(bus.price) }}
+                </p>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Select Seats</label>
+                        <div class="row">
+                            {% for seat in range(1, bus.total_seats + 1) %}
+                                <div class="col-2 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="seats" value="{{ seat }}" 
+                                               id="seat{{ seat }}" {% if seat not in available_seats %}disabled{% endif %}>
+                                        <label class="form-check-label" for="seat{{ seat }}">
+                                            Seat {{ seat }}
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="passenger_name" class="form-label">Passenger Name</label>
+                        <input type="text" class="form-control" id="passenger_name" name="passenger_name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="passenger_phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="passenger_phone" name="passenger_phone" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    <a href="{{ url_for('bus_details', bus_id=bus.id) }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
