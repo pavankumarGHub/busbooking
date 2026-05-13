@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Buses{% endblock %}
+
+{% block content %}
+<h2>Browse Buses</h2>
+
+<form method="GET" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="from_city" class="form-control" placeholder="From City" value="{{ request.args.get('from_city', '') }}">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="to_city" class="form-control" placeholder="To City" value="{{ request.args.get('to_city', '') }}">
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="date" class="form-control" value="{{ request.args.get('date', '') }}">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ url_for('list_buses') }}" class="btn btn-secondary">Reset</a>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    {% for bus in buses %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ bus.name }}</h5>
+                <p class="card-text">
+                    <strong>From:</strong> {{ bus.from_city }}<br>
+                    <strong>To:</strong> {{ bus.to_city }}<br>
+                    <strong>Departure:</strong> {{ bus.departure_time }}<br>
+                    <strong>Arrival:</strong> {{ bus.arrival_time }}<br>
+                    <strong>Price:</strong> ${{ "%.2f"|format(bus.price) }}<br>
+                    <strong>Available Seats:</strong> {{ bus.total_seats - bus.booked_seats|length }}
+                </p>
+                <a href="{{ url_for('bus_details', bus_id=bus.id) }}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">No buses found matching your criteria.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
