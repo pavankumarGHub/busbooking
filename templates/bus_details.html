@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Bus Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>{{ bus.name }}</h3>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>From:</strong> {{ bus.from_city }}<br>
+                    <strong>To:</strong> {{ bus.to_city }}<br>
+                    <strong>Departure:</strong> {{ bus.departure_time }}<br>
+                    <strong>Arrival:</strong> {{ bus.arrival_time }}<br>
+                    <strong>Price per seat:</strong> ${{ "%.2f"|format(bus.price) }}<br>
+                    <strong>Total Seats:</strong> {{ bus.total_seats }}<br>
+                    <strong>Available Seats:</strong> {{ available_seats|length }}
+                </p>
+                {% if session.user_email %}
+                    <a href="{{ url_for('book_ticket', bus_id=bus.id) }}" class="btn btn-success">Book Now</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-warning">Login to Book</a>
+                {% endif %}
+                <a href="{{ url_for('list_buses') }}" class="btn btn-secondary">Back to Buses</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
